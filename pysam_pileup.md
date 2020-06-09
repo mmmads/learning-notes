@@ -22,7 +22,6 @@ gives the mapping quality. A symbol '$' marks the end of a
 read segment
 ```
 
-
 ![参考链接](https://blog.csdn.net/u013553061/article/details/53293302)
 ```
  > 在pileup格式中(没有-u或者-g参数)，每一行代表基因组的位置，由染色体名、1个碱基坐标、参考碱基、reads覆盖该位点的数量、
@@ -51,13 +50,11 @@ for pileupcolumn in samfile.pileup("chr1", 100, 120):
 samfile.close()
 ```
 
-```
-samfile.pileup("chr1", 100, 120)可以获取基因组一段位置的pileup情况
-该region中的每个position(单个碱基)处都有一个pileupcolumn
+samfile.pileup("chr1", 100, 120)可以获取基因组一段位置的pileup情况  
+该region中的每个position(单个碱基)处都有一个pileupcolumn  
 
-````
 
 ```python
-	pileupread.alignment.query_sequence[pileupread.query_position]
+pileupread.alignment.query_sequence[pileupread.query_position]
 ```
 可以返回固定position的碱基 
