@@ -21,9 +21,10 @@ read. The ASCII of the character following '^' minus 33
 gives the mapping quality. A symbol '$' marks the end of a
 read segment
 ```
-```
+
 
 ![参考链接](https://blog.csdn.net/u013553061/article/details/53293302)
+```
  > 在pileup格式中(没有-u或者-g参数)，每一行代表基因组的位置，由染色体名、1个碱基坐标、参考碱基、reads覆盖该位点的数量、
  reads的碱基、碱基质量和比对质量。有关匹配、错配、插入缺失、链、比对质量和一条reads的开始结束位置都被编码到reads碱基列。
  在此列上，“.”表示与正链上的参考碱基匹配，“,”表示与负链上的参考碱基匹配，“>”和“<”表示跳过参考基因，“ACGTN”表示正链上
