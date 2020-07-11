@@ -8,8 +8,8 @@ def iterate(infile):
 
 ## 目录
 * [Pileup Format](#PileupFormat)
-- [生成器与迭代器](#生成器与迭代器)
-- [读取大文件](#读取大文件)
+* [生成器与迭代器](#生成器与迭代器)
+* [读取大文件](#读取大文件)
 * [**gzip**](#gzip)
 
 
@@ -26,16 +26,16 @@ def iterate(infile):
 
 对于read base列：
 * `'.'`表示read base比对到正链(forward)参考碱基
-- `','`表示read base比对到反链(reverse)参考碱基
-- `'ACGTN'`表示比对到正链(forward)上的错配
-- `'acgtn'`表示比对到反链(reverse)上的错配
-- `'>'`表示 正链(forward)上的Reference skip (由于CIGAR 'N')
-- `'<'`表示 反链(reverse)上的Reference skip (由于CIGAR 'N')
-- `'*'`表示 正链(forward)上的Reference deletion (由于CIGAR 'D')
-- `'*/#'`表示 反链(reverse)上的Reference deletion (由于CIGAR 'D')
-- `'^'`表示read segment的开始 read segment是CIGAR'N/S/H'操作符处理的read序列 ^后面的ASCII字符减去33后表示比对质量
-- `'$'`表示read segment的结束
-- 模式`\+[0-9]+[ACGTNacgtn]+`表示这一参考基因位置与下一位置之间有插入 格式为长度+序列
+* `','`表示read base比对到反链(reverse)参考碱基
+* `'ACGTN'`表示比对到正链(forward)上的错配
+* `'acgtn'`表示比对到反链(reverse)上的错配
+* `'>'`表示 正链(forward)上的Reference skip (由于CIGAR 'N')
+* `'<'`表示 反链(reverse)上的Reference skip (由于CIGAR 'N')
+* `'*'`表示 正链(forward)上的Reference deletion (由于CIGAR 'D')
+* `'*/#'`表示 反链(reverse)上的Reference deletion (由于CIGAR 'D')
+* `'^'`表示read segment的开始 read segment是CIGAR'N/S/H'操作符处理的read序列 ^后面的ASCII字符减去33后表示比对质量
+* `'$'`表示read segment的结束
+* 模式`\+[0-9]+[ACGTNacgtn]+`表示这一参考基因位置与下一位置之间有插入 格式为长度+序列
 * 模式`-[0-9]+[ACGTNacgtn]+`表示这一参考基因位置与下一位置之间有删除 格式为长度+序列
 
 example of 2bp insertion on 3 reads:  
