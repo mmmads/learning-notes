@@ -6,10 +6,17 @@ def iterate(infile):
 	## iterate over pileup formatted file 
 ```
 
-### Pileup Format  
+## 目录
+* [Pileup Format](#PileupFormat)
+- [生成器与迭代器](#生成器与迭代器)
+- [读取大文件](#读取大文件)
+* [**gzip**](#gzip)
+
+
+## Pileup Format  
 [参考链接](http://samtools.sourceforge.net/pileup.shtml "samtools文档")  
 
-#### Pileup File每一行对应参考基因组一个位置，一共有六列，列之间用Tab分开，每一列表示内容如下：
+### Pileup File每一行对应参考基因组一个位置，一共有六列，列之间用Tab分开，每一列表示内容如下：
 1. 染色体
 2. `1-based` coordinate 1-碱基坐标
 3. 参考基因组对应位置碱基
@@ -40,33 +47,33 @@ example of 4 bp deletions from ref (support by 2 resds):
 	seq3 200 A 20 ,,,,,..,.-4CACC.-4CACC....,.,,.^~. ==<<<<<<<<<<<::<;2<<  
 
 
-### 生成器与迭代器
+## 生成器与迭代器
 
-#### 迭代器
+### 迭代器
 	所有可以使用for...in...语法的都叫做一个迭代器，如列表、字符串、文件。但是把所有值都存储到内存了。所以不适合于大量数据。
 ```python
 mylist = [x*x for x in range(3)]
 ```
 
-#### 生成器
+### 生成器
 	生成器是可迭代的，但是`只可以读取它一次`，并不是把所有值存储在内存中，而是实时地生成数据。
 ```python
 mygenerator = (x*x for x in range(3))
 ```
 
-#### yield
+### yield
 	是一个类似return的关键字，但yield返回的是个生成器
 
-### 读取大文件
+## 读取大文件
 [参考链接](https://blog.csdn.net/u012733099/article/details/84286626)
 
-#### Preliminary
+### Preliminary
 	Python文件对象提供了三个读方法：read() readlline() readlines。每种方法可以接受一个变量以限制每次读取的数据量，但它们通常不使用变量。
 * read()每次读取整个文件，将文件内容放到一个字符串变量中。 常用read(size)读取size字节 的内容
 - readline()每次读取一行的内容
 * readlines()一次读取所有内容并按行返回list
 
-#### read in chunks
+### read in chunks
 	将大文件分割成若干小文件处理，处理完每个小文件后释放该部分内存
 
 ``` python
@@ -88,7 +95,7 @@ if __name__ == "__main__":
         process(chunk) # <do something with chunk>
 ```
 
-#### using with open()
+### using with open()
    用with语句打开和关闭文件，`for line in file`会将文件对象file视为一个迭代器，会自动采用缓冲IO和内存管理。
 
 ``` python
@@ -98,7 +105,7 @@ if __name__ == "__main__":
             process(line) # <do something with line>
 ```
 
-#### yield
+### yield
 	通过yield 不需要编写读文件的迭代类
 
 ``` python
@@ -124,15 +131,15 @@ gzip使用zlib对数据进行压缩，zlib使用的是DEFLATE算法，压缩过�
 所以压缩之后 对于不同的原始数据，替换重复序列后的结果和哈夫曼编码的结果会不同，因此没有通用的方法能够仅仅根据原始数据中的位置来换算出压缩后的位置。  
 Deflate Stream是比特流，原始数据中某个位置在压缩以后可能对应到非字节边界上，这是无法用sekk直接来定位的。
 
-#### 暴力算法
+### 暴力算法
 zlib官方提供的 gzseek()/gzrewind()方法。从文件头部开始一边解压缩一边计数，直到到达指定位置。
 
-#### 空间换时间：zran.c
+### 空间换时间：zran.c
 利用额外的空间储存建立的索引。在seek时先在索引中查到大致的数据范围，然后解压缩指定位置的数据，再进行seek。
-##### indexed_gzip(Python)
+### indexed_gzip(Python)
 允许用户持久化索引，将生成的索引存储到磁盘上，下次打开压缩文件的时候可以指定索引，避免了重复创建索引。不过索引的数据结构仍然是线性表
 
-#### BGZF(Block GZip Format)
+### BGZF(Block GZip Format)
 BGZF把`每个gzip块的长度信息写入到Extra Field`标识符为0x4243（小端）的自定义额外字段中。可以通过bgzip命令行转换现有的gz文件或创建新的压缩文件。
 	$ bgzip uncompressed.txt                      # 压缩  
 
@@ -169,7 +176,7 @@ BGZF把`每个gzip块的长度信息写入到Extra Field`标识符为0x4243（�
 6. 如果指定位置P小于`ISIZE`，则解压缩当前块的CDATA以后得到的数据位置P就是读取的起点
 该方法用seek()跳过了解压缩数据的步骤，但仍是顺序搜索。
 
-#### 更高效的索引结果
+### 更高效的索引结果
 可以通过构建原始数据偏移量-压缩数据偏移量/长度的树来实现将查找时间复杂度降低到O(log(n))。树的构建过程如下：
 1. 打开BGZF文件
 2. 创建名字为`INPUT_OFFSET`的变量，保存原始数据偏移量，初始值均为0
