@@ -3,7 +3,7 @@
 ## SAM format
 [参考链接](http://samtools.github.io/hts-specs/SAMv1.pdf)
 
-BAM以BGZF格式压缩。BAM中的多字节数都是低位字节序（little-endian），与机器字节序无关。下图中描述了SAM格式，其中括号中的值是相应信息不可用时的默认值(default)。带下划线的大写字母表示SAM格式中对应字段。(如POS MAPQ)
+BAM以BGZF格式压缩。BAM中的多字节数都是低位字节序（little-endian），与机器字节序无关。下图中描述了SAM格式，其中括号中的值是相应信息不可用时的默认值(default)。带下划线的大写字母表示SAM格式中对应字段。(如POS MAPQ)  
 ![SAM格式](https://pics.images.ac.cn/image/5f0ea961c7c25.html)
 
 Sequence以4-bit值编码。邻近的碱基被打包成同一字节。当l_seq是奇数时，最后一个byte的后四位是没有被定义的，但是建议将他们写成零。不区分大小写的碱基编码`=ACMGRSVTWYHKDBN`被映射到[0,15]，所有其它字符都映射到'N'
@@ -22,3 +22,4 @@ Sequence以4-bit值编码。邻近的碱基被打包成同一字节。当l_seq�
 ``` C
 typedef unsigned char		uint8_t;
 ```
+
