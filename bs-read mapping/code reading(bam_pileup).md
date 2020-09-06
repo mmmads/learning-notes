@@ -8,6 +8,10 @@ conf: configuration for this pileup
 fn: filenames
 fn_idx: index filenames
 bam1_t
+pysam pileup : 0-based coordinates
+所以pysam pileup 其实还是读取的还是vcf file
+
+-- 准备在samtools mpileup 中进行改动，将生成的txt文件进行处理
 
 
 ## C语言相关
@@ -94,12 +98,63 @@ typedef struct {
 ```
 
 ```C
+//
 typedef struct {
     int n;
     int *n_plp, *m_plp;
     bam_pileup1_t **plp;
 } mplp_pileup_t;
 ```
+
+### htslib sam.h
+```C
+//
+typedef int64_t hts_pos_t;
+typedef struct {
+    hts_pos_t pos;
+    int32_t tid;
+    uint16_t bin; // NB: invalid on 64-bit pos
+    uint8_t qual;
+    uint8_t l_extranul;
+    uint16_t flag;
+    uint16_t l_qname;
+    uint32_t n_cigar;
+    int32_t l_qseq;
+    int32_t mtid;
+    
+    hts_pos_t mpos;
+    hts_pos_t isize;
+} bam1_core_t;
+
+typedef struct {
+    //
+    bam1_core_t core;
+    uint64_t id;
+    uint8_t *data;
+    int l_data;
+    uint32_t m_data;
+    uint32_t mempolicy:2, :30 /* Reserved */;
+} bam1_t;
+
+//
+typedef struct {
+    bam1_t *b;
+    int32_t qpos;
+    int indel, level;
+    uint32_t is_del:1, is_head:1, is_tail:1, is_refskip:1, /* reserved */ :1, aux:27;
+    bam_pileup_cd cd; // generic per-struct data, owned by caller.
+    int cigar_ind;
+} bam_pileup1_t;
+
+
+typedef union {
+    void *p;
+    int64_t i;
+    double f;
+} bam_pileup_cd;
+
+```
+
 
 #### bam2bcf.h  
 结构体  
